@@ -1,0 +1,260 @@
+
+.footer-section {
+  padding-top: 75px;
+  color: #ffffff;
+  background: #064e3b;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr 1fr 1.2fr;
+  gap: 45px;
+  padding-bottom: 55px;
+}
+
+/* Hospital logo and description */
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 22px;
+}
+
+.footer-logo-icon {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #064e3b;
+  background: #ffffff;
+  border-radius: 11px;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.footer-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.footer-logo-text strong {
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.footer-logo-text small {
+  color: #c5ddd3;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.footer-about > p {
+  max-width: 290px;
+  color: #c5ddd3;
+  font-size: 13px;
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+
+/* Social links */
+
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.footer-socials a {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.footer-socials a:hover {
+  color: #064e3b;
+  background: #ffffff;
+  transform: translateY(-3px);
+}
+
+/* Footer headings and links */
+
+.footer-links h3,
+.footer-contact h3 {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 650;
+  margin-bottom: 25px;
+}
+
+.footer-links ul {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #c5ddd3;
+  font-size: 13px;
+  transition: color 0.3s, gap 0.3s;
+}
+
+.footer-links li a svg {
+  color: #73c7a4;
+}
+
+.footer-links li a:hover {
+  color: #ffffff;
+  gap: 13px;
+}
+
+/* Contact information */
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 19px;
+  color: #c5ddd3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer-contact-item svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #73c7a4;
+}
+
+.footer-contact-item a {
+  color: #c5ddd3;
+  transition: color 0.3s;
+}
+
+.footer-contact-item a:hover {
+  color: #ffffff;
+}
+
+.footer-appointment-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: fit-content;
+  margin-top: 8px;
+  padding: 12px 17px;
+  color: #064e3b;
+  background: #ffffff;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 650;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.footer-appointment-btn:hover {
+  background: #dff4e9;
+  transform: translateY(-2px);
+}
+
+/* Bottom bar */
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 23px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.footer-bottom p {
+  color: #c5ddd3;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.footer-bottom-links a {
+  color: #c5ddd3;
+  font-size: 12px;
+  transition: color 0.3s;
+}
+
+.footer-bottom-links a:hover {
+  color: #ffffff;
+}
+
+/* Responsive */
+
+@media (max-width: 1024px) {
+  .footer-main {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-section {
+    padding-top: 55px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 35px 20px;
+    padding-bottom: 40px;
+  }
+
+  .footer-about {
+    grid-column: 1 / -1;
+  }
+
+  .footer-about > p {
+    max-width: 100%;
+  }
+
+  .footer-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-about {
+    grid-column: auto;
+  }
+
+  .footer-bottom-links {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

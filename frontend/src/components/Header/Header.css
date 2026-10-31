@@ -1,0 +1,262 @@
+/* Common Container */
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Top Information Bar */
+.topbar {
+  background: var(--primary-dark);
+  color: var(--bg-white);
+  font-size: 12px;
+}
+
+.topbar-content,
+.topbar-left,
+.topbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.topbar-content {
+  min-height: 40px;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.topbar-left,
+.topbar-right {
+  gap: 24px;
+}
+
+.topbar span,
+.topbar-right a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.topbar-right a {
+  transition: color 0.2s ease;
+}
+
+.topbar-right a:hover {
+  color: #a7e7c8;
+}
+
+/* Main Navbar */
+.navbar {
+  position: relative;
+  background: var(--bg-white);
+  border-bottom: 1px solid #edf1ef;
+  z-index: 100;
+}
+
+.navbar-content {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand-icon {
+  width: 43px;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 800;
+  border-radius: 10px;
+}
+
+.brand-text h2 {
+  color: var(--primary-dark);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.brand-text span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+/* Desktop Navigation */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.desktop-nav a {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.desktop-nav a:hover {
+  color: var(--primary);
+}
+
+/* Appointment Button */
+.appointment-btn,
+.mobile-appointment-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 13px 19px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.appointment-btn:hover,
+.mobile-appointment-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--primary-dark);
+  padding: 5px;
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .desktop-nav {
+    gap: 16px;
+  }
+
+  .desktop-nav a {
+    font-size: 12px;
+  }
+
+  .appointment-btn {
+    padding: 11px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 850px) {
+  .desktop-nav,
+  .appointment-btn {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 24px;
+    background: var(--bg-white);
+    border-top: 1px solid #edf1ef;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition:
+      max-height 0.3s ease,
+      padding 0.3s ease,
+      visibility 0.3s ease;
+  }
+
+  .mobile-nav.active {
+    max-height: 420px;
+    padding: 12px 24px 20px;
+    visibility: visible;
+  }
+
+  .mobile-nav > a:not(.mobile-appointment-btn) {
+    padding: 13px 0;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid #edf1ef;
+  }
+
+  .mobile-appointment-btn {
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar-content {
+    justify-content: center;
+  }
+
+  .topbar-left {
+    gap: 15px;
+  }
+
+  .topbar-left span:nth-child(2),
+  .topbar-right {
+    display: none;
+  }
+
+  .navbar-content {
+    min-height: 72px;
+  }
+
+  .brand-icon {
+    width: 39px;
+    height: 39px;
+    font-size: 20px;
+  }
+
+  .brand-text h2 {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .brand-text h2 {
+    font-size: 17px;
+  }
+
+  .brand-text span {
+    font-size: 9px;
+  }
+}
