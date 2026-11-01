@@ -12,6 +12,7 @@ import Blog from "./sections/Blog/Blog";
 
 import Login from "./admin/pages/Login";
 import Dashboard from "./admin/pages/Dashboard";
+import AdminDoctors from "./admin/pages/adminDoctor/adminDoctor";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
 import AdminDepartments from "./admin/pages/adminDepartments/adminDepartment";
 function HomePage() {
@@ -71,6 +72,7 @@ function App() {
       <Route element={<ProtectedRoute />}></Route>
          <Route path="/admin/dashboard" element={<Dashboard />} />
            <Route path="/admin/departments" element={<AdminDepartments />} />
+              <Route path="/admin/doctors" element={<AdminDoctors/>} />
     </Routes>
   );
 }

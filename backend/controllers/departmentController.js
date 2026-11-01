@@ -102,16 +102,20 @@ export const updateDepartment = async (req, res) => {
 
     Object.assign(department, req.body);
 
-    if (req.file) {
-      department.image = `/uploads/${req.file.filename}`;
-    }
+    const shouldRemoveImage = req.body.removeImage === "true";
+
+if (req.file) {
+  department.image = `/uploads/${req.file.filename}`;
+} else if (shouldRemoveImage) {
+  department.image = "";
+}
 
     await department.save();
 
     // Delete old image only after the new department data is saved.
-    if (req.file && oldImage) {
-      await deleteDepartmentImage(oldImage);
-    }
+   if ((req.file || shouldRemoveImage) && oldImage) {
+  await deleteDepartmentImage(oldImage);
+}
 
     res.status(200).json({
       success: true,

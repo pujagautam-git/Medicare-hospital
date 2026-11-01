@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import protectAdmin from "./middleware/authMiddleware.js";
 import departmentRoutes from "./routes/departmentRoute.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
 // Authentication routes
 app.use("/api/auth", authRoutes);
 app.use("/api/departments", departmentRoutes);
-
+app.use("/api/doctors", doctorRoutes);
 // Protected test route
 app.get("/api/admin/dashboard", protectAdmin, (req, res) => {
   res.status(200).json({
