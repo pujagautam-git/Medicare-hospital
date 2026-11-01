@@ -1,9 +1,19 @@
 import Department from "../models/Department.js";
+import fs from "fs/promises";
+import path from "path";
 
 // Get all departments
 export const getDepartments = async (req, res) => {
   try {
-    const departments = await Department.find().sort({ createdAt: -1 });
+    const filter = {};
+
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+
+    const departments = await Department.find(filter).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
@@ -17,7 +27,6 @@ export const getDepartments = async (req, res) => {
     });
   }
 };
-
 // Get single department
 export const getDepartment = async (req, res) => {
   try {
@@ -42,31 +51,37 @@ export const getDepartment = async (req, res) => {
   }
 };
 
+
 // Create department
 export const createDepartment = async (req, res) => {
   try {
-    const { name, slug, description, icon, image, status } = req.body;
+    const { name, slug, description, icon, status } = req.body;
 
     const department = await Department.create({
       name,
       slug,
       description,
       icon,
-      image,
       status,
+      image: req.file ? `/uploads/${req.file.filename}` : "",
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: "Department created successfully",
+      message: "Department created successfully.",
       department,
     });
   } catch (error) {
-    res.status(400).json({
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "A department with this slug already exists.",
+      });
+    }
+
+    return res.status(500).json({
       success: false,
-      message: error.code === 11000
-        ? "This department slug already exists"
-        : error.message,
+      message: error.message,
     });
   }
 };
@@ -74,33 +89,41 @@ export const createDepartment = async (req, res) => {
 // Update department
 export const updateDepartment = async (req, res) => {
   try {
-    const department = await Department.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const department = await Department.findById(req.params.id);
 
     if (!department) {
       return res.status(404).json({
         success: false,
-        message: "Department not found",
+        message: "Department not found.",
       });
+    }
+
+    const oldImage = department.image;
+
+    Object.assign(department, req.body);
+
+    if (req.file) {
+      department.image = `/uploads/${req.file.filename}`;
+    }
+
+    await department.save();
+
+    // Delete old image only after the new department data is saved.
+    if (req.file && oldImage) {
+      await deleteDepartmentImage(oldImage);
     }
 
     res.status(200).json({
       success: true,
-      message: "Department updated successfully",
+      message: "Department updated successfully.",
       department,
     });
   } catch (error) {
-    res.status(400).json({
+    console.error("Update department error:", error);
+
+    res.status(500).json({
       success: false,
-      message: error.code === 11000
-        ? "This department slug already exists"
-        : error.message,
+      message: "Failed to update department.",
     });
   }
 };
@@ -108,23 +131,48 @@ export const updateDepartment = async (req, res) => {
 // Delete department
 export const deleteDepartment = async (req, res) => {
   try {
-    const department = await Department.findByIdAndDelete(req.params.id);
+    const department = await Department.findById(req.params.id);
 
     if (!department) {
       return res.status(404).json({
         success: false,
-        message: "Department not found",
+        message: "Department not found.",
       });
+    }
+
+    const imagePath = department.image;
+
+    await Department.findByIdAndDelete(req.params.id);
+
+    if (imagePath) {
+      await deleteDepartmentImage(imagePath);
     }
 
     res.status(200).json({
       success: true,
-      message: "Department deleted successfully",
+      message: "Department deleted successfully.",
     });
   } catch (error) {
+    console.error("Delete department error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to delete department.",
     });
+  }
+};
+const deleteDepartmentImage = async (imagePath) => {
+  if (!imagePath || !imagePath.startsWith("/uploads/")) return;
+
+  const filename = path.basename(imagePath);
+  const filePath = path.join(process.cwd(), "uploads", filename);
+
+  try {
+    await fs.unlink(filePath);
+    console.log("Old department image deleted:", filename);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      console.error("Image deletion failed:", error.message);
+    }
   }
 };

@@ -1,3 +1,5 @@
+
+import { useEffect, useState } from "react";
 import {
   HeartPulse,
   Brain,
@@ -10,65 +12,55 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
+import api from "../../services/api";
 import "./Department.css";
 
-const departments = [
-  {
-    icon: HeartPulse,
-    title: "Cardiology",
-    description:
-      "Comprehensive heart care, diagnosis and treatment for cardiovascular conditions.",
-  },
-  {
-    icon: Brain,
-    title: "Neurology",
-    description:
-      "Expert care for brain, spinal cord and nervous system disorders.",
-  },
-  {
-    icon: Bone,
-    title: "Orthopedics",
-    description:
-      "Specialized treatment for bones, joints, muscles and mobility problems.",
-  },
-  {
-    icon: Baby,
-    title: "Pediatrics",
-    description:
-      "Complete healthcare services focused on children's growth and wellbeing.",
-  },
-  {
-    icon: Eye,
-    title: "Ophthalmology",
-    description:
-      "Advanced eye examinations, vision care and treatment for eye conditions.",
-  },
-  {
-    icon: Stethoscope,
-    title: "General Medicine",
-    description:
-      "Diagnosis, prevention and treatment of common medical conditions.",
-  },
-  {
-    icon: Activity,
-    title: "Gynecology",
-    description:
-      "Dedicated healthcare services for women's health and wellness.",
-  },
-  {
-    icon: Microscope,
-    title: "Laboratory",
-    description:
-      "Reliable diagnostic testing and laboratory services for better care.",
-  },
-];
+const iconMap = {
+  HeartPulse,
+  Brain,
+  Bone,
+  Baby,
+  Eye,
+  Stethoscope,
+  Activity,
+  Microscope,
+};
 
 function Departments() {
+  const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const serverUrl = api.defaults.baseURL.replace(/\/api\/?$/, "");
+
+  const getImageUrl = (image) => {
+    if (!image) return "";
+    if (image.startsWith("http")) return image;
+    return `${serverUrl}${image}`;
+  };
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await api.get("/departments?status=active");
+        setDepartments(response.data.departments || []);
+      } catch (error) {
+        console.error("Failed to fetch departments:", error);
+        setError("Unable to load departments. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
   return (
     <section className="departments-section" id="departments">
       <div className="container">
+
         {/* Section Heading */}
-        <div className="departments-heading" data-aos="fade-up">
+        <div className="public-departments-heading" data-aos="fade-up">
           <span className="section-label">OUR SPECIALTIES</span>
 
           <h2>
@@ -84,46 +76,65 @@ function Departments() {
         </div>
 
         {/* Department Cards */}
-        <div className="departments-grid">
-          {departments.map((department, index) => {
-            const Icon = department.icon;
+        {loading ? (
+          <p className="public-departments-message">
+            Loading departments...
+          </p>
+        ) : error ? (
+          <p className="public-departments-message">{error}</p>
+        ) : departments.length === 0 ? (
+          <p className="public-departments-message">
+            No departments are currently available.
+          </p>
+        ) : (
+          <div className="public-departments-grid">
+            {departments.map((department, index) => {
+              const Icon = iconMap[department.icon] || Stethoscope;
 
-            return (
-              <div
-                className="department-card"
-                key={department.title}
-                data-aos="fade-up"
-                data-aos-delay={(index % 4) * 100}
-              >
-                <div className="department-icon">
-                  <Icon size={27} strokeWidth={1.8} />
-                </div>
-
-                <h3>{department.title}</h3>
-
-                <p>{department.description}</p>
-
-                <a
-                  href={`#${department.title
-                    .toLowerCase()
-                    .replaceAll(" ", "-")}`}
-                  className="department-link"
+              return (
+                <div
+                  className="public-department-card"
+                  key={department._id}
+                  data-aos="fade-up"
+                  data-aos-delay={(index % 4) * 100}
                 >
-                  Explore Department
-                  <ArrowUpRight size={17} />
-                </a>
-              </div>
-            );
-          })}
-        </div>
+                  {department.image ? (
+                    <img
+                      src={getImageUrl(department.image)}
+                      alt={department.name}
+                      className="public-department-image"
+                    />
+                  ) : (
+                    <div className="public-department-icon">
+                      <Icon size={27} strokeWidth={1.8} />
+                    </div>
+                  )}
+
+                  <h3>{department.name}</h3>
+
+                  <p>{department.description}</p>
+
+                  <a
+                    href={`#${department.slug}`}
+                    className="public-department-link"
+                  >
+                    Explore Department
+                    <ArrowUpRight size={17} />
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* View All Button */}
-        <div className="departments-footer" data-aos="fade-up">
-          <a href="#all-departments" className="departments-btn">
+        <div className="public-departments-footer" data-aos="fade-up">
+          <a href="#all-departments" className="public-departments-btn">
             View All Departments
             <ArrowUpRight size={18} />
           </a>
         </div>
+
       </div>
     </section>
   );
